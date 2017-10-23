@@ -1,0 +1,53 @@
+server {
+
+    listen 80;
+
+    root /home/sumeet/NIPS-Papers-Search-App/;
+
+    server_name 95.85.30.94;
+
+    location /home {
+        #proxy_pass http://localhost:8000/;
+        #proxy_set_header Host $host;
+        #proxy_set_header X-Real-IP $remote_addr;
+        alias /home/sumeet/homepage/;
+        index index.html;
+    }
+    
+    location /es/ {
+       proxy_pass http://localhost:9200/; 
+    }
+    
+    location / {
+       #root /home/sumeet/NIPS-Papers-Search-App/;
+       #index index.html;
+       proxy_pass http://localhost:3000/;
+    }
+
+
+    location ~ ^/references/(.*)$ {
+       alias /home/sumeet/Dendogram/$1;
+       index WeightedtreeTest.html;
+       expires 30d;		
+    }
+}
+
+#server {
+#        listen 80;
+
+#        server_name 95.85.30.94;
+
+#        location / {
+#            proxy_pass http://kibana;
+#            proxy_http_version 1.1;
+#            proxy_set_header Upgrade $http_upgrade;
+#            proxy_set_header Connection 'upgrade';
+#            proxy_set_header Host $host;
+#            proxy_cache_bypass $http_upgrade;
+#        }
+
+#        location /home/{
+#                proxy_pass http://localhost:9200/;
+#        }
+#}
+
