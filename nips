@@ -10,23 +10,37 @@ server {
         #proxy_pass http://localhost:8000/;
         #proxy_set_header Host $host;
         #proxy_set_header X-Real-IP $remote_addr;
-        alias /home/sumeet/homepage/;
+        alias /home/sumeet/home/;
         index index.html;
     }
     
     location /es/ {
-       proxy_pass http://localhost:9200/; 
+       proxy_pass http://localhost:9200/;
+       proxy_http_version 1.1;
+       proxy_set_header Upgrade $http_upgrade;
+       proxy_set_header Connection "upgrade";
+       proxy_set_header Host $host; 
     }
     
     location / {
        #root /home/sumeet/NIPS-Papers-Search-App/;
        #index index.html;
        proxy_pass http://localhost:3000/;
+       proxy_http_version 1.1;
+       proxy_set_header Upgrade $http_upgrade;
+       proxy_set_header Connection "upgrade";
+       proxy_set_header Host $host;
     }
 
 
     location ~ ^/references/(.*)$ {
        alias /home/sumeet/Dendogram/$1;
+       index WeightedtreeTest.html;
+       expires 30d;		
+    }
+    
+   location ~ ^/authors/(.*)$ {
+       alias /home/sumeet/authorClusters/$1;
        index WeightedtreeTest.html;
        expires 30d;		
     }
